@@ -5,6 +5,9 @@ spring:
     name: gateway-service
   cloud:
     gateway:
+      plugin:
+        config:
+          log-request: true
       routes:
         - id: profile-service
           uri: lb://profile-service
@@ -13,8 +16,9 @@ spring:
           filters:
             - name: RequestRateLimiter
               args:
-                redis-rate-limiter.replenishRate: 6
-                redis-rate-limiter.burstCapacity: 3
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 2
+                key-resolver: "#{@requestPathKeyResolver}"
 eureka:
   instance:
     preferIpAddress: true
